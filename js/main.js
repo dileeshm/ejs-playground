@@ -22,21 +22,22 @@
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/ejs");
     editor.on("change", update);
-    editor.setValue(`OK, so have fun! :D
--------------------
+    editor.setValue(`<%
+const data = [{ ID: 1, MESSAGE: 'Hello, World!' },{ ID: 2, MESSAGE: 'Foo Bar' },{ ID: 3 }];
+-%>
 <%
-    var fruits = ["Apple", "Pear", "Orange", "Lemon"]
-      , random = " ".repeat(198).split("").map(x => Math.random())
-      ;
+data.forEach((record) => {
+  const recordObj = {
+    ...record
+  };
+
+  recordObj.hasMessage = !_.isNil(record.MESSAGE);
 %>
-
-These fruits are amazing:
-<% for(var i = 0; i < fruits.length; ++i) {%>
-  - <%=fruits[i]%>s<% } %>
-
-Let's see some random numbers:
-
-<% random.forEach((c, i) => {
-%> <%=c.toFixed(10) + ((i + 1) % 6 === 0 ? "\\n": "") %><%});%>`, -1);
+<%-
+JSON.stringify(recordObj);
+-%>
+<%
+});
+%>`, -1);
     editor.focus();
 })();
